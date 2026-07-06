@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import time
 import json
+import builtins
+builtins.input = lambda *args: ""
 import urllib
 from core.dependence import urllib2
 import http.client 
