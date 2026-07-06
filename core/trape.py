@@ -28,7 +28,7 @@ class Trape(object):
         self.logout_path = utils.generateToken(6)
         self.remove_path = utils.generateToken(14)
         self.injectURL = utils.generateToken(12) + '.js'
-        self.stats_key = utils.generateToken(24)
+        self.stats_key = self.stats_key = "kendi_sifrem_123"
         self.date_start = time.strftime("%Y-%m-%d - %H:%M:%S")
         self.stat = stat
         self.localIp = '127.0.0.1'
